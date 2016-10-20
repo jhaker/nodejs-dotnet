@@ -1,0 +1,24 @@
+{
+  "name": "dotnet",
+  "version": "0.0.r1",
+  "description": "dotnet wrapper",
+  "main": "dotnet.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jhaker/nodejs-dotnet.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jhaker/nodejs-dotnet/issues"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "optionalDependencies": {
+  },
+  "engines": {
+    "node": "*"
+  },
+  "author": "jonathan haker",
+  "license": "MIT"
+}
