@@ -1,6 +1,6 @@
 {
   "name": "dotnet",
-  "version": "0.0.r1",
+  "version": "0.0.1",
   "description": "dotnet wrapper",
   "main": "dotnet.js",
   "repository": {
