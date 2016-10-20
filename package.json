@@ -1,24 +1,28 @@
 {
   "name": "dotnet",
   "version": "0.0.1",
-  "description": "dotnet wrapper",
+  "description": ".NET Core cross-platform javascript library",
   "main": "dotnet.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jhaker/nodejs-dotnet.git"
+    "url": "git+https://github.com/jhaker/nodejs-dotnet.git"
   },
   "bugs": {
     "url": "https://github.com/jhaker/nodejs-dotnet/issues"
   },
-  "dependencies": {
-  },
-  "devDependencies": {
-  },
-  "optionalDependencies": {
-  },
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {},
   "engines": {
     "node": "*"
   },
   "author": "jonathan haker",
-  "license": "MIT"
+  "license": "MIT",
+  "homepage": "https://github.com/jhaker/nodejs-dotnet#readme",
+  "scripts": {
+    "test": "echo \"test\""
+  },
+  "keywords": [
+    "dotnet"
+  ]
 }
