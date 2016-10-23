@@ -1,6 +1,6 @@
 {
   "name": "dotnet",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": ".NET Core cross-platform javascript library",
   "main": "dotnet.js",
   "repository": {

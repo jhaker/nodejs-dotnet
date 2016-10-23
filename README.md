@@ -6,7 +6,7 @@ Build. Restore. Run. Pack.
 
 
 ``` js
-var dotnet = require('../nodejs-dotnet-working/dotnet')();
+var dotnet = require('dotnet')();
 dotnet.constructor({args:['new']});
 dotnet.start();
 ```
@@ -33,7 +33,7 @@ bower install dotnet
 
 ### New
 ```
-var dotnet = require('../nodejs-dotnet-working/dotnet')();
+var dotnet = require('dotnet')();
 dotnet.constructor({args:['new']});
 dotnet.start();
 ```
@@ -41,15 +41,14 @@ dotnet.start();
 OR
 
 ```
-var dotnet = require('../nodejs-dotnet-working/dotnet')();
-dotnet.new();
+require('dotnet')().new();
 ```
 
 
 
 ### Pack
 ```
-var dotnet = require('../nodejs-dotnet-working/dotnet')();
+var dotnet = require('dotnet')();
 dotnet.constructor({args:['pack']});
 dotnet.start();
 ```
@@ -57,6 +56,5 @@ dotnet.start();
 OR
 
 ```
-var dotnet = require('../nodejs-dotnet-working/dotnet')();
-dotnet.:['();
+require('dotnet')().pack();
 ```
