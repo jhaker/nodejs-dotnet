@@ -10,9 +10,7 @@
 
 var Dotnet = module.exports = function (options, cursor) {
 
-	var childprocess = require('child_process');
 	var platform = require('os').platform();
-	var spawn = require('child_process').spawn;
 	var exec = require('child_process').exec;
 	var config = require('./config');
 
