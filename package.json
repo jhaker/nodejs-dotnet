@@ -1,6 +1,6 @@
 {
   "name": "dotnet",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": ".NET Core cross-platform javascript library",
   "main": "dotnet.js",
   "repository": {
@@ -14,9 +14,17 @@
 	"promise":"*",
 	"minimist":"*"
   },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  },
   "author": "jonathan haker",
   "license": "MIT",
   "homepage": "https://github.com/jhaker/nodejs-dotnet#readme",
+   "scripts": {
+    "test": "echo \"test\""
+  },
   "keywords": [
     "dotnet", 
 	"ASP.NET Core",
