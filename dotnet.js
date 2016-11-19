@@ -7,187 +7,182 @@
 
 */
 
-
-var Dotnet = module.exports = function (options, cursor) {
-
-	var platform = require('os').platform();
-	var exec = require('child_process').exec;
-	var config = require('./config');
+var Promise = require('promise');
+var parseArgs = require('minimist');
+var argv = parseArgs(process.argv.slice(2));
 
 
-	/*  default options  */
-	var cmd = 'dotnet';
-	var args = [];
-	var options = {};
+var Dotnet = function(){
+	var executeCommand = function(cmd,args){
+		var command = (cmd + ' ' + args);	
+		console.log(command + ' starting');
+		var exec = require('child_process').exec;
+		
+		return new Promise(function (resolve, reject) {
+			exec(command,null,function(error,stdout,stderr){
+					return error
+						? reject(stderr)
+						: resolve(stdout);
+				});
+		});
+	}
+	 
+	var DotnetConstants = (function(){
+		return {
+			RUNNER_TYPE : 'dotnet',
+			COMMAND_NEW : "new",
+			COMMAND_RESTORE : "restore",
+			COMMAND_RUN : "run",
+			COMMAND_BUILD : "build",
+			COMMAND_TEST : "test",
+			COMMAND_PUBLISH : "publish",
+			COMMAND_PACK : "pack"
+		}
+	})();
 
-
-	/*  configure  */
-	config.platform = platform;
-	config.command = 'dotnet';
-	config.args = args;
+	var buildExecuteCommand = function(cmd){
+		return executeCommand(DotnetConstants.RUNNER_TYPE,cmd);
+	}
+	var _NEW = function(){
+		return buildExecuteCommand([DotnetConstants.COMMAND_NEW]);
+	};
+	var _RESTORE = function(){
+		return buildExecuteCommand([DotnetConstants.COMMAND_RESTORE]);
+	};
+	var _RUN = function(){
+		return buildExecuteCommand([DotnetConstants.COMMAND_RUN]);
+	};
+	var _BUILD = function(){
+		return buildExecuteCommand([DotnetConstants.COMMAND_BUILD]);
+	};
+	var _TEST = function(){
+		return buildExecuteCommand([DotnetConstants.COMMAND_TEST]);
+	};
+	var _PUBLISH = function(){
+		return buildExecuteCommand([DotnetConstants.COMMAND_PUBLISH]);
+	};
+	var _PACK = function(){
+		return buildExecuteCommand([DotnetConstants.COMMAND_PACK]);
+	};
+	var onError = function(err){
+		console.log('ERROR: '+err);
+	};
+	var _init = new Promise(function (resolve, reject) {
+			resolve();
+	});
 
 	
-	/*  exec  */
-	var processExec = function(cmd,args,callback){	
-		cmd = (cmd + ' ' + args);	
-		exec(cmd,
-			function(error,stdout,stderr){
-				if(error){
-					console.error('error');
-					console.error(error);
-					return callback(error);
-				}
-				console.log(stdout);
-				return callback(null,'success');
-			}
-		);
+	var _cmds = [];
+	var _new = function(){
+		_cmds.push(_NEW);
+		return this;
 	}
-
-	var callback = function(error,data,callback){
-		if(error){
-			console.error('has error');
-			console.error(error);
-		}	
-		console.info(data);
-		if(callback && isFunction(callback)){
-			return callback();
-		} else{
-			if(callback){
-				console.log(callback);
-			}
-			return done();
-		}
+	var _restore = function(){
+		_cmds.push(_RESTORE);
+		return this;
 	}
-
-	var cmdexists = function(cmd,callback){
-		var isUsingWindows = process.platform == 'win32'
-		var cmdUnix = function(cmd, callback) {
-		  var child = exec('command -v ' + cmd +
-				' 2>/dev/null && { echo >&1 \'' + 
-				cmd + ' found\'; exit 0; }',
-				function (error, stdout, stderr) {
-					return callback(null, !!stdout);
-				});
+	var _run = function(){
+		_cmds.push(_RUN);
+		return this;
+	}
+	var _build = function(){
+		_cmds.push(_BUILD);
+		return this;
+	}
+	var _test = function(){
+		_cmds.push(_TEST);
+		return this;
+	}
+	var _publish = function(){
+		_cmds.push(_PUBLISH);
+		return this;
+	}
+	var _pack = function(){
+		_cmds.push(_PACK);
+		return this;
+	}
+	/*deprecated*/
+	var _start = function(){
+		console.log('dotnet.start is deprecated');
+	}
+	var _mapArgs = function(x,y){
+		if(x === 'new'){
+			_new();
 		}
-		var cmdWindows = function function_name(cmd, callback) {
-		  var child = exec('where ' + cmd,
-			function (error) {
-			  if (error !== null){
-				return callback('*** error missing ' + cmd, false);
-			  } else {
-				return callback(null, true);
-			  }
-			}
-		  )
+		if(x === 'restore'){
+			_restore();
 		}
-		if (isUsingWindows) {
-			cmdWindows(cmd, callback)
-		} else {
-			cmdUnix(cmd, callback)
+		if(x === 'run'){
+			_run();
+		}
+		if(x === 'build'){
+			_build();
+		}
+		if(x === 'test'){
+			_test();
+		}
+		if(x === 'publish'){
+			_publish();
+		}
+		if(x === 'pack'){
+			_pack();
 		}
 	}
-
-	var done = function(){
-		console.log('done');
-		return;
-	}
-
-	var execute = function(error,hasDotnet){
-		if(error){
-			console.error(error);
-		}
-
-		if(hasDotnet && error == null){	
-			return processExec(cmd,args,callback);
-		} else {
-			console.info('.NET Core and dotnet build tool can be found online https://www.microsoft.com/net/core');
+	var _series = function(){
+		_cmds = [];
+		var args = arguments[0];
+		if(!Array.isArray(args)){
+			console.log('error: no elements in series');
 			return;
 		}
-	}
-
-	var _constructor = function(){
-		config.args = Object.assign(config.args,arguments[0]).args;
-	}
-
-	var _start = function(callback){
-		if(!callback ){
-			callback = done;
-		}
-		if(callback && !isFunction(callback)){
-			callback = done;
-		}
-
-		if(!config.args || config.args.length == 0){
-			console.error('error missing args. example dotnet.constructor({args:[\'new\']});');
-			config.args.push('-h');
-		} else{
-			console.error(config.args);
-		}
-		
-		return processExec(config.command, config.args, callback);
-	}
-
-	var _new = function(error, data, callback){
-		_constructor({args:['new']});
-		return _start(callback);
-	}
-
-	var _restore = function(error, data, callback){
-		_constructor({args:['restore']});
-		return _start(callback);
-	}
-
-	var _pack = function(error, data, callback){
-		_constructor({args:['pack']});
-		return _start(callback);
+		args.map(_mapArgs);
+		return;
 	}
 	
-	var _run = function(error, data, callback){
-		_constructor({args:['run']});
-		return _start(callback);
-	}
+	var _constructor = function(){
+		var args = arguments[0];
+		if(Array.isArray(args)){
+			argv = Object.assign(argv, parseArgs(args));
+		} else{
+			args = args.args;
+			if(args != 'undefined'){
+				argv = Object.assign(argv, parseArgs(args));
+			}
+		}
+		argv._.map(_mapArgs);
+		return;
+	}	
+		
+	setTimeout(function(){
+		_cmds.reduce(function(chain,fn){
+				return chain.then(fn);
+			},_init).done();
+	},300);
+	
 
+(function(){
+	_constructor.apply(this,
+	[{'args':process.argv.slice(2)}]
+	)})();
+	
 	return {
 		constructor : _constructor,
-		args : config.args,
-		start : _start,
-		new : _new, 
-		restore : _restore, 
-		pack : _pack,
-		run : _run
-	};
+		start:_start,
+		new : _new,
+		restore: _restore,
+		run: _run,
+		build: _build,
+		test: _test,
+		publish: _publish,
+		pack: _pack,
+		series : _series
+	}
 }
 
+var dn = new Dotnet();
 
-/*  utils  */
-var isFunction = function(x) {
-  return Object.prototype.toString.call(x) == '[object Function]';
-}
+module.exports = dn;
+module.exports.argv = argv;
 
 
-/*  polyfills  */
-/*  assign polyfill - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign */
-if (typeof Object.assign != 'function') {
-  (function () {
-    Object.assign = function (target) {
-      'use strict';
-      // We must check against these specific cases.
-      if (target === undefined || target === null) {
-        throw new TypeError('Cannot convert undefined or null to object');
-      }
 
-      var output = Object(target);
-      for (var index = 1; index < arguments.length; index++) {
-        var source = arguments[index];
-        if (source !== undefined && source !== null) {
-          for (var nextKey in source) {
-            if (source.hasOwnProperty(nextKey)) {
-              output[nextKey] = source[nextKey];
-            }
-          }
-        }
-      }
-      return output;
-    };
-  })();
-}

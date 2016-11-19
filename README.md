@@ -1,14 +1,13 @@
 # dotnet
 
-Build. Restore. Run. Pack. 
+New. Restore. Run. Build. Test. Publish. Pack. 
 
 
 
 
 ``` js
-var dotnet = require('dotnet')();
-dotnet.constructor({args:['new']});
-dotnet.start();
+var dotnet = require('dotnet');
+dotnet.new();
 ```
 
 
@@ -30,31 +29,23 @@ bower install dotnet
 
 
 # examples
-
-### New
+### Running single command
 ```
-var dotnet = require('dotnet')();
-dotnet.constructor({args:['new']});
-dotnet.start();
-```
-
-OR
-
-```
-require('dotnet')().new();
+require('dotnet').new();
 ```
 
 
 
-### Pack
+### Running multiple commands - method chaining
 ```
-var dotnet = require('dotnet')();
-dotnet.constructor({args:['pack']});
-dotnet.start();
+var dotnet = require('dotnet');
+dotnet.new().restore().build().publish();
 ```
 
-OR
+### Running multiple commands - series
 
 ```
-require('dotnet')().pack();
+var dotnet = require('dotnet');
+dotnet.series(['new','restore','build','publish']);
 ```
+
