@@ -22,8 +22,8 @@
 	"ASP.NET Core",
 	".NET Core",
 	".NET",
-	'CLI',
-	'dotnet commands',
-	'.NET commands'
+	"CLI",
+	"dotnet commands",
+	".NET commands"
   ]
 }
