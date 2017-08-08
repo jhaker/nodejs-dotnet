@@ -3,6 +3,8 @@
 New. Restore. Run. Build. Test. Publish. Pack. 
 
 
+##Just a command-line wrapper. For CLR/.NET Core/Mono - in process checkout https://github.com/tjanczuk/edge. 
+
 
 
 ``` js
